@@ -1,0 +1,149 @@
+<%-include('./partials/header.ejs')%>
+<link rel="stylesheet" href="./css/Restaurant.css"/>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body>
+
+        <nav class="navbar shadow">
+                <div class="container">
+                        <a class="navbar-brand logoFont brand-name"><img src="./assets/logo.png" width="40"> Serve My Table</a>
+                        <div class="navbar-nav ml-auto">
+                                <button class="btn yelBtn mFont" onclick="payBill( '<%=Dish%>','<%=TableNo%>','<%=id%>','<%=Time%>' )">Pay Now</button>
+                        </div>
+
+                </div>
+        </nav>
+
+        <div class="container mt-30" id="printBill">
+                
+                <div class="mFont RestaurantName">
+                        <%=full.RestaurantName %>
+                 </div>
+                 <div class="mFont mt-10 RestaurantLocation">
+                       <%=full.Location %>
+                 </div>
+
+                <div class="mFont mt-10 Restaurantgstin">
+                        GSTIN : <%=full.gstin %>
+                </div>
+                <div>
+                        <hr class="line-theme">
+                </div>
+                <div class="row">
+
+                        <a class="mFont" style="padding-left: 10px;">Table No. <%=TableNo%></a>
+                
+                        <div class="ml-auto">
+                              <a class="mFont" style="padding-right: 10px;">Date : <%=new Date().getDate() +'/'+(new Date().getMonth()+1)+'/'+new Date().getFullYear() %></a>
+                        </div>
+                </div>
+                <div>
+                        <hr class="line-theme">
+                        <br>
+                </div>
+                <div class="row  mt-30">
+                        <div class="col-6">
+                              <a class="mFont">Particulars</a>
+                        </div>
+
+                        <div class="col-2">
+                              <a class="mFont">Rate</a>
+                        </div>
+
+                        <div class="col-2">
+                              <a class="mFont">Qty</a>
+                        </div>
+
+                        <div class="col-2">
+                              <a class="mFont">Amt</a>
+                        </div>
+                </div>
+                <div>
+                        <hr class="line-theme">
+                </div>
+                <%var subTotal = 0;%>
+                <%for(var i = 0 ; i < Total ; i++){%>
+                        <div class="row">
+                                <div class="col-6">
+                                        <%=Dish[i][0]%>
+                                </div>
+                                <div class="col-2">
+                                        <%= Dish[i][2] %>
+                                </div>
+                                <div class="col-2">
+                                        <%=Dish[i][1]%>
+                                </div>
+                                <div class="col-2">
+                                        <% subTotal += parseInt(Dish[i][1]) * parseInt(Dish[i][2])%>
+                                        <%= parseInt(Dish[i][1]) * parseInt(Dish[i][2]) %>
+                                </div>
+                        </div>
+                <%}%>
+
+                <div>
+                        <hr class="line-theme">
+                </div>
+
+                <div class="row">
+                        <div class="col-3 offset-7 mFont">
+                              Sub Total
+                        </div>
+                        <div class="col-2 mFont" id="totalAmt">
+                              <%=subTotal%>
+                        </div>
+                </div>
+
+                <div class="row">
+
+                        <div class="col-2 offset-5 mFont">
+                              CGST
+                        </div>
+                        <div class="col-2 mFont">
+                              2.5%
+                        </div>
+                        <div class="col-2 offset-1 mFont" id="CGST">
+                                <%= Math.round((subTotal*0.025 + Number.EPSILON) * 100) / 100%>
+                        </div>
+                </div>
+
+                <div class="row">
+
+                        <div class="col-2 offset-5 mFont">
+                              SGST
+                        </div>
+                        <div class="col-2 mFont">
+                              2.5%
+                        </div>
+                        <div class="col-2 offset-1 mFont" id="SGST">
+                                <%= Math.round((subTotal*0.025 + Number.EPSILON) * 100) / 100%>
+                        </div>
+                </div>
+                  
+                <div class="row totalBox">
+                        <div class="mFont col-2 offset-7">
+                              Total
+                        </div>
+                        <div class="mFont col-2 offset-1" id="TotalCalc">
+                                <%= Math.round((subTotal*0.05 + Number.EPSILON) * 100) / 100 + subTotal %>
+                        </div>
+                </div>
+                  
+                      
+                <br>
+                <div class="row">
+                        <div class="col-md-4 col-sm-8">
+                              <a class="mFont Timestamp" name="Time">Time <%=Time%></a>
+                        </div>
+                        <div class="col-md-3 offset-md-5 col-sm-4">
+                              <p class="mFont website">www.servemytable.in</p>
+                        </div>
+                </div>
+        </div>
+
+        <div class="container">
+                <button class="btn yel-outline mFont" onclick="printDiv()">Download Bill</button>
+                <br>
+                <br>
+        </div>
+
+        <script src="./scripts/Cart.js" type="text/javascript"></script>

@@ -1,0 +1,58 @@
+:root{
+
+      --theme-color : #ffd31d;
+      --theme-grey : #B7B6B3;
+      --facebook : #3B5998;
+      --dark-red : #d63447;
+      --theme-orange : #f57b51;
+}
+
+.logoFont {
+      font-family: "PT Sans",sans-serif;
+}
+
+.mFont{
+      font-family: "Noto Sans",sans-serif;
+}
+
+button{
+      border: none;
+}
+
+button:focus{
+      outline: none;
+}
+
+input:focus{
+      outline: none;
+}
+
+.yelBtn{
+      background-color: var(--theme-color);
+}
+
+.yelBtn:hover{
+      
+      background-color: #ffd21dc2;
+}
+
+.yel-outline{
+      background-color: white;
+      border: 1px solid var(--theme-color);
+      border-radius: 2px;
+      color: black;
+}
+.yel-outline:hover{
+      background-color: var(--theme-color);
+}
+
+.mt-10{
+      margin-top: 10px;
+}
+.mb-10{
+      margin-bottom: 10px;
+}
+
+.mt-30{
+      margin-top: 30px;
+}

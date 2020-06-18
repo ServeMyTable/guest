@@ -1,0 +1,26 @@
+<%-include('./partials/header.ejs')%>
+
+<link rel="stylesheet" href="./css/home.css"/>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
+
+</head>
+<body>
+
+      <div class="LoginParent">
+            <div class="LoginChild">
+            
+                  <h1 class="logoFont brand-name">Serve My Table</h1>
+                  <br/>
+                  <video id="preview"></video>
+                  <button class="yelBtn mt-10 mFont ScannerBtn" onclick="startScanning()"><i class="fa fa-qrcode"></i> Scan QR Code</button>
+                  
+            </div>
+
+      </div>
+      
+
+<script src="./scripts/Home.js" type="text/javascript"></script>
+
+<%- include('./partials/footer.ejs') %>
