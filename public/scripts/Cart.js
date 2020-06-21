@@ -17,7 +17,8 @@ function payBill(Dish,TableNo,Id,Time){
                 id : Id,
                 TotalBill : document.getElementById('TotalCalc').innerText,
                 Time :Time,
-                SubTotal : document.getElementById('totalAmt').innerText
+                SubTotal : document.getElementById('totalAmt').innerText,
+                CustomerName : document.getElementById('CustName').innerText
         }).then((response)=>{
                 window.location = response.data;
         });

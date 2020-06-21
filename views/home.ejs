@@ -15,6 +15,15 @@
                   <br/>
                   <video id="preview"></video>
                   <button class="yelBtn mt-10 mFont ScannerBtn" onclick="startScanning()"><i class="fa fa-qrcode"></i> Scan QR Code</button>
+                  <br><br>
+                  <p class="mFont">Or</p>
+
+                  <form method="POST" action="/restaurant">
+                        <input class="loginInput mFont" name="CustomerName" type="text" placeholder="Enter your Name " required><br>
+                        <input class="loginInput mFont" name="id" type="tel" placeholder="Enter Restaurant's Phone No." required><br>
+                        <input class="loginInput mFont" name="table" type="number" placeholder="Enter Restaurant's Table No." required><br><br>
+                        <button class="btn yel-outline mFont">View Restaurant's Menu</button>
+                  </form>
                   
             </div>
 

@@ -4,8 +4,10 @@ function startScanning(){
       scanner.addListener('scan', function (content) {
             //alert(content);
             scanner.stop();
-            alert('Scanning Completed click OK to view Menu!!')
-            window.location = content;
+            //alert('Scanning Completed click OK to view Menu!!')
+            const name = prompt("Please Enter your Name");
+            //alert(name);
+            window.location = content+'&name='+name;
 
       });
       Instascan.Camera.getCameras().then(function (cameras) {

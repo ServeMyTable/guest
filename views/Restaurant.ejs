@@ -16,9 +16,10 @@
 
       <div class="container">
       
-            <h1 class="mFont mt-30"><%=Restaurant.name%></h1>
+            <h2 class="mFont mt-30"><%=Restaurant.name%></h2>
             <h3 class="mFont mt-10 Restlocation"><%=Restaurant.location%></h3>
-      
+            <h4 class="mFont mt-10">Hello <%=CustomerName%>!</h4>
+
             <%const UniqueCategories = Restaurant.full.Categories.filter(function(item, pos){return Restaurant.full.Categories.indexOf(item)== pos;});%>
 
             <input type="text" id="DishToSearch" onkeyup="filterItems()" placeholder="Search in Menu" class="mFont searchBar"/>
@@ -64,6 +65,7 @@
       <form action="/Cart" method="POST" style="display: none;" id="CartForm">
             <input name="TableNo" value='<%=Table%>' >
             <input name="Id" value="<%=Restaurant.full.Phone%>" >
+            <input name="CustomerName" value="<%=CustomerName%>">
             <button type="submit" id="ordersSubmit"></button>
       </form>
 

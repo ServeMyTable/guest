@@ -56,12 +56,33 @@ app.get('/restaurant',function(req,res){
                               dishes : doc.Dishes,
                               full : doc
                         },
-                        Table:req.param('table')
+                        Table:req.param('table'),
+                        CustomerName : req.param('name') 
                   });
             }
       });
       
 });
+
+app.post('/restaurant',function(req,res){
+
+      User.findOne({Phone : req.body.id},function(err,doc){
+            if(err){ console.log(err)}
+            else{
+
+                  res.render("Restaurant.ejs",{
+                        Restaurant : {
+                              name : doc.RestaurantName,
+                              location : doc.Location,
+                              dishes : doc.Dishes,
+                              full : doc
+                        },
+                        Table:req.body.table,
+                        CustomerName : req.body.CustomerName 
+                  });
+            }
+      });
+})
 
 app.post('/Cart',function(req,res){
       const ADishes = [];
@@ -82,7 +103,8 @@ app.post('/Cart',function(req,res){
                         id : req.body.Id,
                         Total : req.body.TotalItems,
                         full : doc,
-                        Time : Today[1]
+                        Time : Today[1],
+                        CustomerName : req.body.CustomerName
                   });
             }
       });
@@ -109,7 +131,8 @@ app.post('/Table',function(req,response){
                   tableNo : req.body.TableNo,
                   Orders : Orders,
                   TotalBill : req.body.TotalBill,
-                  SubTotal : req.body.SubTotal
+                  SubTotal : req.body.SubTotal,
+                  CustomerName : req.body.CustomerName
             }
             },{ upsert:true }
             ,function(error,raw){
