@@ -17,6 +17,9 @@
     "https": "^1.0.0",
     "instascan": "^1.0.0",
     "mongoose": "^5.9.16",
-    "path": "^0.12.7"
+    "path": "^0.12.7",
+    "razorpay": "^2.0.6",
+    "request": "^2.88.2",
+    "shortid": "^2.2.15"
   }
 }

@@ -1,6 +1,7 @@
 <%-include('./partials/header.ejs')%>
 <link rel="stylesheet" href="./css/Restaurant.css"/>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 </head>
 <body>
 
@@ -8,24 +9,27 @@
                 <div class="container">
                         <a class="navbar-brand logoFont brand-name"><img src="./assets/logo.png" width="40"> Serve My Table</a>
                         <div class="navbar-nav ml-auto">
+                                <div class="row">
+                                <button class="btn yel-outline mFont" onclick="payBillCash( '<%=Dish%>','<%=TableNo%>','<%=id%>','<%=Time%>' )">Pay By Cash</button>
                                 <button class="btn yelBtn mFont" onclick="payBill( '<%=Dish%>','<%=TableNo%>','<%=id%>','<%=Time%>' )">Pay Now</button>
+                                </div>
                         </div>
 
                 </div>
         </nav>
         <div>
-                <h2 class="mFont mt-30" id="CustName">Hello <%=CustomerName%> !</h2>
+                <h2 class="mFont mt-30 text-center" id="CustName">Hello <%=CustomerName%> !</h2>
         </div>
         <div class="container mt-10" id="printBill">
                 
-                <div class="mFont RestaurantName">
+                <div class="mFont RestaurantName" id="RestaurantName">
                         <%=full.RestaurantName %>
                  </div>
-                 <div class="mFont mt-10 RestaurantLocation">
+                 <div class="mFont mt-10 RestaurantLocation" id="RestAddress">
                        <%=full.Location %>
                  </div>
-
-                <div class="mFont mt-10 Restaurantgstin">
+                 <div class="mFont csrf_token" style="display: none;" id="csrf_token"><%=full.RazAccountId%></div>
+                <div class="mFont mt-10 Restaurantgstin" id="GSTIN">
                         GSTIN : <%=full.gstin %>
                 </div>
                 <div>
@@ -94,7 +98,18 @@
                               <%=subTotal%>
                         </div>
                 </div>
+                <div class="row">
 
+                        <div class="col-2 offset-5 mFont">
+                              Service Fee
+                        </div>
+                        <div class="col-2 mFont">
+                              2%
+                        </div>
+                        <div class="col-2 offset-1 mFont" id="ServiceFee">
+                                <%= Math.round((subTotal*0.02 + Number.EPSILON) * 100) / 100%>
+                        </div>
+                </div>
                 <div class="row">
 
                         <div class="col-2 offset-5 mFont">
@@ -120,13 +135,15 @@
                                 <%= Math.round((subTotal*0.025 + Number.EPSILON) * 100) / 100%>
                         </div>
                 </div>
-                  
+
+                
+                <br>  
                 <div class="row totalBox">
                         <div class="mFont col-2 offset-7">
                               Total
                         </div>
                         <div class="mFont col-2 offset-1" id="TotalCalc">
-                                <%= Math.round((subTotal*0.05 + Number.EPSILON) * 100) / 100 + subTotal %>
+                                <%= Math.round((subTotal*0.07 + Number.EPSILON) * 100) / 100 + subTotal %>
                         </div>
                 </div>
                   
@@ -142,10 +159,17 @@
                 </div>
         </div>
 
-        <div class="container">
-                <button class="btn yel-outline mFont" onclick="printDiv()">Download Bill</button>
-                <br>
-                <br>
-        </div>
+        <form action="/FinalPage" method="POST" style="display: none;" id="FinalPageForm">
+                <input name="id" value="<%= full.Phone %>" >
+                <input name="TableNo" value="<%= TableNo %>" >
+                <input name="Dish" value="<%= Dish %>" >
+                <input name="TotalBill" value=" <%= Math.round((subTotal*0.07 + Number.EPSILON) * 100) / 100 + subTotal %> " >
+                <input name="SubTotal" value=" <%= subTotal %> " >
+                <input name="CustomerName" value="<%= CustomerName %>" >
+                <input name="RestaurantName" value="<%= full.RestaurantName %>" >
+                <input name="RestaurantAddress" value="<%= full.Location %>" >
+                <input name="RestaurantGST" value="<%= full.gstin %>" >
+                <button type="submit" id="FinalPageBtn"></button>
+        </form>
 
         <script src="./scripts/Cart.js" type="text/javascript"></script>

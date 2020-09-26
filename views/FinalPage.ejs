@@ -3,12 +3,204 @@
 
 </head>
 <body>
-        <div class="messageDiv">
-                <h1 class="logoFont heading mt-30">Serve My Table</h1><br><br>
-                <h1 class="heading"><img src="./assets/tick.svg" width="200" height="200"></h1><br>
-                <h3 class="mFont heading">Thank You for Believing in Us</h2>
-                <h4 class="mFont heading">Your Order is Being Prepared</h3>
+	<nav class="navbar shadow">
+                <div class="container">
+                        <a class="navbar-brand brand-name"><img src="./assets/logo.png" class="logoImage" width="40"> Serve My Table</a>
+                        <div class="navbar-nav ml-auto">    
+                            <button class="btn yel-outline mFont" data-toggle="modal" data-target="#downloadModal">Download Bill</button>
+                        </div>
+
+                </div>
+        </nav>
+        <%var Today = new Date()%>
+        <div class="mt-30">
+                <div class="UpperBox">
+                        <span class="inBlock">
+                                <img class="tick" src="./assets/fullTick.svg" width="50" height="50">
+                        </span>
+                        <span class="inBlock">
+                                <%if(PaymentID){%>
+                                        <h5 class="mFont ml-10"><%=CustomerName%>
+                                        <br>Transaction Successfull
+                                        <br>Date : <%=Today.getDate()+" / "+(parseInt(Today.getMonth())+1) +" / "+Today.getFullYear()%></h5>
+                                <%}else{%>
+                                        <h5 class="mFont ml-10"><%=CustomerName%>
+                                        <br>Order Placed Successfully
+                                        <br>Date : <%=Today.getDate()+" / "+(parseInt(Today.getMonth())+1) +" / "+Today.getFullYear()%></h5>
+                                <%}%>
+                        </span>
+                </div>
+
+                <div class="mFont rd mb-30">Restaurant Details</div>
+
+                <div class="mFont ml-10">
+                   <%=RestaurantName%>
+                <br><%=RestaurantAddress%>
+                <br><%=RestaurantGST%>
+                <%if(PaymentID){%>
+                <br>Transaction Id : <%=PaymentID%>
+                <%}%>
+                <br>Table : <%=tableNo%>
+                </div>
         </div>
+        <div class="mFont rd">Order</div>
+        <table class="table">
+                <thead class="thead-light">
+                  <tr>
+                        <th scope="col">#</th>
+                    <th scope="col">Particulars</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Rate</th>
+                    <th scope="col">Amount</th>
+                  </tr>
+                </thead>
+                <tbody>
+                <%for(var i = 0 ; i < Orders.length ; i++){%>
+                  <tr>
+                    <th scope="row"><%=(i+1)%></th>
+                    <td><%=Orders[i].DishName%></td>
+                    <td><%=Orders[i].Quantity%></td>
+                    <td><%=Orders[i].Rate%></td>
+                    <td><%= parseInt(Orders[i].Rate) * parseInt(Orders[i].Quantity) %></td>
+                  </tr>
+                <%}%>
+                <tr class="mFont">
+                       <th scope="row"></th>
+                       <td></td>
+                       <td><strong>Sub Total</strong></td>
+                       <td></td>
+                       <td><%= SubTotal%></td>
+                </tr>
+                <tr class="mFont">
+                        <th scope="row"></th>
+                        <td></td>
+                        <td><strong>Service Fee (2%)</strong></td>
+                        <td></td>
+                        <td><%= Math.round((SubTotal*0.02 + Number.EPSILON) * 100) / 100%></td>
+                 </tr>
+                 <tr class="mFont">
+                        <th></th>
+                        <td></td>
+                        <td><strong>CGST (2.5%)</strong></td>
+                        <td></td>
+                        <td><%= Math.round((SubTotal*0.025 + Number.EPSILON) * 100) / 100%></td>
+                 </tr>
+                 <tr class="mFont">
+                        <th scope="row"></th>
+                        <td></td>
+                        <td><strong>SGST (2.5%)</strong></td>
+                        <td></td>
+                        <td><%= Math.round((SubTotal*0.025 + Number.EPSILON) * 100) / 100%></td>
+                 </tr>
+                 <tr class="totalBox">
+                        <th scope="row"></th>
+                        <td></td>
+                        <td><strong>Total</strong></td>
+                        <td></td>
+                        <td><%=TotalBill%></td>
+                 </tr>
+                </tbody>
+        </table>
 
+        <footer class=" text-center pd-10 ">
+               <a class="footerNew" href="https://www.servemytable.in"> Serve My Table</a>
+        </footer>
 
+         <div class="modal fade" id="downloadModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title mFont">Receipt</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="printBill">
+                <div>
+                    <div class="text-center mFont">
+                        <%=RestaurantName%>
+                        <br><%=RestaurantAddress%>
+                        <br><%=RestaurantGST%>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-8 mFont">
+                             <%=CustomerName%>
+                        </div>
+                        <div class="col-4 mFont">
+                           Time: <%=Today.getHours() + ":" + Today.getMinutes() + ":" + Today.getSeconds()%>
+                        </div>
+                    </div>
+                </div>
+                <table class="table">
+                    <thead class="thead-light">
+                    <tr>
+                            <th scope="col">#</th>
+                        <th scope="col">Particulars</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Rate</th>
+                        <th scope="col">Amount</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <%for(var i = 0 ; i < Orders.length ; i++){%>
+                          <tr>
+                            <th scope="row"><%=(i+1)%></th>
+                            <td><%=Orders[i].DishName%></td>
+                            <td><%=Orders[i].Quantity%></td>
+                            <td><%=Orders[i].Rate%></td>
+                            <td><%= parseInt(Orders[i].Rate) * parseInt(Orders[i].Quantity) %></td>
+                          </tr>
+                        <%}%>
+                        <tr class="mFont">
+                               <th scope="row"></th>
+                               <td></td>
+                               <td><strong>Sub Total</strong></td>
+                               <td></td>
+                               <td><%= SubTotal%></td>
+                        </tr>
+                        <tr class="mFont">
+                                <th scope="row"></th>
+                                <td></td>
+                                <td><strong>Service Fee (2%)</strong></td>
+                                <td></td>
+                                <td><%= Math.round((SubTotal*0.02 + Number.EPSILON) * 100) / 100%></td>
+                         </tr>
+                         <tr class="mFont">
+                                <th></th>
+                                <td></td>
+                                <td><strong>CGST (2.5%)</strong></td>
+                                <td></td>
+                                <td><%= Math.round((SubTotal*0.025 + Number.EPSILON) * 100) / 100%></td>
+                         </tr>
+                         <tr class="mFont">
+                                <th scope="row"></th>
+                                <td></td>
+                                <td><strong>SGST (2.5%)</strong></td>
+                                <td></td>
+                                <td><%= Math.round((SubTotal*0.025 + Number.EPSILON) * 100) / 100%></td>
+                         </tr>
+                         <tr class="totalBox">
+                                <th scope="row"></th>
+                                <td></td>
+                                <td><strong>Total</strong></td>
+                                <td></td>
+                                <td><%=TotalBill%></td>
+                         </tr>
+                        </tbody>
+            </table>
+                
+                <div class="logoFont">
+                    Date : <%= Today.getFullYear()+'-'+(Today.getMonth()+1)+'-'+Today.getDate() %> 
+                    <br>www.servemytable.in
+                </div>
+                    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary mfont" data-dismiss="modal">Close</button>
+                    <button type="button" onclick="printDiv()" class="btn yelBtn mFont">Download</button>
+                </div>
+            </div>
+        </div>
+        </div>
 <%-include('./partials/footer.ejs')%>

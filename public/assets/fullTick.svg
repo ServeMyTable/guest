@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="118" height="118" viewBox="0 0 118 118">
+  <g id="fullTick" transform="translate(-148 -120)">
+    <g id="Ellipse_53" data-name="Ellipse 53" transform="translate(148 120)" fill="#ffd31d" stroke="#ffd31d" stroke-width="1">
+      <circle cx="59" cy="59" r="59" stroke="none"/>
+      <circle cx="59" cy="59" r="58.5" fill="none"/>
+    </g>
+    <line id="Line_67" data-name="Line 67" x2="19" y2="24" transform="translate(170.5 179.5)" fill="none" stroke="#fff" stroke-linecap="round" stroke-width="10"/>
+    <line id="Line_68" data-name="Line 68" x1="48" y2="40" transform="translate(189.5 163.5)" fill="none" stroke="#fff" stroke-linecap="round" stroke-width="10"/>
+  </g>
+</svg>

@@ -48,7 +48,9 @@ const tableSchema = new Schema({
       },
       CustomerName : {
             type : String
-      }
+      },
+      PaymentMode : { type : String },
+      PaymentStatus : {type : Boolean, default:false}
 },{
       timestamps:true
 });

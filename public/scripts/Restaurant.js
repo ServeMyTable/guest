@@ -14,7 +14,7 @@ function addItem(position){
       const Dish = document.getElementById('DishName'+position);
       const Quantity = document.getElementById('Quantity'+position);
       const Price = document.getElementById('DishPrice'+position);
-      
+
       let counter = 0;
       for(var i = 0 ; i < Order.length ; i++){
             counter++;
@@ -45,7 +45,7 @@ function decrement(position){
       num = num - 1;
       if(num < 0){
             obj.innerHTML = 0
-            checkElements()      
+            checkElements()
       }else{
             obj.innerHTML = num;
             addItem(position)
@@ -54,7 +54,7 @@ function decrement(position){
 
 function getOrders(){
 
-      const FinalOrder = [];      
+      const FinalOrder = [];
       for(var k = 0 ; k < Order.length ; k++){
             if(Order[k].Quantity != "0"){
 
@@ -94,20 +94,34 @@ function getOrders(){
 }
 
 function filterItems(){
-      
-      var input, filter, ul, li, a, i, txtValue;
+
+      var input, filter, i, j, temp, NoOfDishes, h3, hr ;
       input = document.getElementById('DishToSearch');
       filter = input.value.toUpperCase();
-      ul = document.getElementById("ListOfDishes");
-      li = ul.getElementsByTagName('li');
-
-      for (i = 0; i < li.length; i++) {
-      a = li[i].getElementsByTagName("a")[0];
-      txtValue = a.textContent || a.innerText;
-      if (txtValue.toUpperCase().indexOf(filter) > -1) {
-            li[i].style.display = "";
-      } else {
-            li[i].style.display = "none";
+      NoOfDishes = document.getElementById("disheslen").innerText;
+      h3 = document.getElementsByTagName("h3");
+      hr = document.getElementsByClassName("categorical-line");
+      for(j = 0 ; j < h3.length ; j++){
+                if(filter === ""){
+                        h3[j].style.display = "";
+                        hr[j].style.display = "";
+                }
+                else{
+                        h3[j].style.display = "none";
+                        hr[j].style.display = "none";
+                }
       }
+
+      for (i = 1; i <= NoOfDishes; i++) {
+            temp = document.getElementById("DishName"+i);
+
+            if (temp.innerText.toUpperCase().indexOf(filter) > -1) {
+
+                  temp.parentElement.parentElement.style.display = "";
+
+            } else {
+
+                  temp.parentElement.parentElement.style.display = "none";
+            }
 }
 }

@@ -17,7 +17,11 @@
                   <button class="yelBtn mt-10 mFont ScannerBtn" onclick="startScanning()"><i class="fa fa-qrcode"></i> Scan QR Code</button>
                   <br><br>
                   <p class="mFont">Or</p>
-
+                  
+                  <%if(Message.status === 0){%>
+                        <button class="alert alert-danger mt-10 mb-10 mFont" role="alert"> <%=Message.msg%> </button>
+                  <%}%>
+                  <br>
                   <form method="POST" action="/restaurant">
                         <input class="loginInput mFont" name="CustomerName" type="text" placeholder="Enter your Name " required><br>
                         <input class="loginInput mFont" name="id" type="tel" placeholder="Enter Restaurant's Phone No." required><br>
