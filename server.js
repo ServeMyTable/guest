@@ -9,9 +9,6 @@ const Table = require('./models/Table');
 const Payment = require('./models/Payment');
 const shortid = require('shortid');
 
-const fs = require('fs');
-const https = require('https');
-
 const MyRequest = require('request');
 
 require('dotenv').config();
@@ -22,13 +19,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 
 app.use(express.static("public"));
 
-app.use (function (req, res, next) {
-        if (req.secure) {
-                next();
-        } else {
-                res.redirect('https://' + req.headers.host + req.url);
-        }
-});
+
 
 mongoose.connect(process.env.MONGODB_URL,
       {
@@ -44,10 +35,7 @@ mongoose.connect(process.env.MONGODB_URL,
             }
 });
 
-const httpsOptions ={
-      cert : fs.readFileSync('server.cert'),
-      key  : fs.readFileSync('server.key')
-}
+
 
 
 app.get('/',function(req,res){
@@ -57,7 +45,7 @@ app.get('/',function(req,res){
 });
 
 app.get('/restaurant',function(req,res){
-     
+
       User.findOne({Phone : req.param('id')},function(err,doc){
             if(err){ res.render("Error.ejs",{error:"Some Error Occured."})}
             else{
@@ -78,10 +66,11 @@ app.get('/restaurant',function(req,res){
 });
 
 app.post('/restaurant',function(req,res){
-      
+
       User.findOne({Phone : req.body.id},function(err,doc){
             if(err){ res.render("Error.ejs",{error:"Some Error Occured."}) }
             else{
+                  if(doc){
                   if(req.body.table > doc.nTables){
                         res.render('home.ejs',{Message : {status:0 , msg:"Table with number "+req.body.table+" does not exists."}});
                   }else{
@@ -96,6 +85,10 @@ app.post('/restaurant',function(req,res){
                               CustomerName : req.body.CustomerName
                         });
                   }
+            }else{
+                  res.render('home.ejs',{Message : {status:0 , msg:"Invalid Phone Number"}});
+            }
+
             }
       });
 })
@@ -144,30 +137,21 @@ app.post('/Table', (req,response)=>{
             });
       }
 
-      Table.updateMany({RestaurantID:req.body.id,tableNo : req.body.TableNo},
-            {
-            $set :{
-                  RestaurantID : req.body.id,
-                  tableNo : TableNo,
-                  Orders : Orders,
-                  TotalBill : Bill,
-                  SubTotal : req.body.SubTotal,
-                  CustomerName : CustomerName,
-                  PaymentMode : req.body.PaymentMode
-            }
-            },{ upsert:true }
-            ,function(error,raw){
+      var newTable = new Table({
+            RestaurantID : req.body.id,
+            tableNo : TableNo,
+            Orders : Orders,
+            TotalBill : Bill,
+            SubTotal : req.body.SubTotal,
+            CustomerName : CustomerName,
+            PaymentMode : req.body.PaymentMode
+      });
+      newTable.save(function(error,raw){
             if(!error){
-                  if(req.body.PaymentMode === "Online"){
-
-
-
-                  }else{
-                        response.json({mode:"Cash"});
-                  }
-
+                  if(req.body.PaymentMode === "Online"){}
+                  else{ response.json({mode:"Cash"}); }
             }else{
-              response.render("Error.ejs",{error:"Some Error Occured."})
+              response.render("Error.ejs",{error:"Some Error Occured."});
             }
       });
 
@@ -287,7 +271,6 @@ app.get("*",function(req,res){
 
 //=================================== LISTEN ON PORT ==================================
 
-https.createServer(httpsOptions, app)
-.listen(process.env.PORT || 8080,function(){
-      console.log('Server is up and Running on https://localhost:8080');
+app.listen(process.env.PORT || 8080,function(){
+      console.log('Server is up and Running on http://localhost:8080');
 });

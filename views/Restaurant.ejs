@@ -9,7 +9,7 @@
             <div class="container">
                   <a class="navbar-brand logoFont brand-name"><img src="./assets/logo.png" width="40"> Serve My Table</a>
                   <div class="navbar-nav ml-auto">
-                        <img id="CartImage" src="./assets/cart.svg" onclick="getOrders()" alt="cart image">
+                      <button class="yelBtn btn" onclick="getOrders()"><img id="CartImage" src="./assets/cart.svg"  alt="cart image"> Place Order</button>
                   </div>
             </div>
       </nav>
@@ -24,7 +24,7 @@
                         width="100" height="100">
                   </div>
                   <div class="col-8">
-                        <h3 class="mFont mt-30"><%=Restaurant.name%></h3>
+                        <h2 class="mFont mt-30"><%=Restaurant.name%></h2>
                         <h4 class="mFont mt-10 Restlocation"><%=Restaurant.location%></h4>
                   </div>
             </div>
