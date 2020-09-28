@@ -207,7 +207,7 @@ app.post('/Table', (req,response)=>{
 app.post('/FinalPage',function(req,res){
 
       Table.updateMany({RestaurantID:req.body.id,tableNo : req.body.TableNo},
-            { $set :{ PaymentStatus : true } },{ upsert:true }
+            { $set :{ PaymentStatus : true, PaymentID : req.body.paymentId } },{ upsert:true }
             ,(err)=>{
                   if(err){
                         response.render("Error.ejs",
@@ -232,7 +232,7 @@ app.post('/FinalPage',function(req,res){
                           if (generated_signature == razorpay_signature) {
                             payment is successful add to payment
                           }*/
-
+                        
                         Payment.updateMany({RestaurantID:req.body.id,TableNo:req.body.TableNo},
                           {$set : {
                             RestaurantID : req.body.id,

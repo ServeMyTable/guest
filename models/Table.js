@@ -50,7 +50,8 @@ const tableSchema = new Schema({
             type : String
       },
       PaymentMode : { type : String },
-      PaymentStatus : {type : Boolean, default:false}
+      PaymentStatus : {type : Boolean, default:false},
+      PaymentID : {type: String , default : ""}
 },{
       timestamps:true
 });
