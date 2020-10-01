@@ -120,13 +120,13 @@ app.post('/Cart',function(req,res){
 
 });
 
-app.post('/Table', (req,response)=>{
-
+app.post('/TableCash',function(req,res){
       const Orders = [];
       const temp = req.body.Dish;
       const CustomerName = req.body.CustomerName;
       const TableNo = req.body.TableNo;
       const Bill = parseFloat(req.body.TotalBill);
+      const notes = req.body.notes;
 
       const result = temp.split(',');
       for(var i = 0 ; i < result.length ; i=i+3){
@@ -136,7 +136,6 @@ app.post('/Table', (req,response)=>{
                   Rate : result[i+2]
             });
       }
-
       var newTable = new Table({
             RestaurantID : req.body.id,
             tableNo : TableNo,
@@ -144,16 +143,36 @@ app.post('/Table', (req,response)=>{
             TotalBill : Bill,
             SubTotal : req.body.SubTotal,
             CustomerName : CustomerName,
-            PaymentMode : req.body.PaymentMode
+            PaymentMode : req.body.PaymentMode,
+            notes : notes,
+            PaymentStatus : true
       });
       newTable.save(function(error,raw){
             if(!error){
-                  if(req.body.PaymentMode === "Online"){}
-                  else{ response.json({mode:"Cash"}); }
+                  res.json({mode:"Cash"});
             }else{
-              response.render("Error.ejs",{error:"Some Error Occured."});
+                  res.render("Error.ejs",{error:"Some Error Occured."});   
             }
       });
+});
+
+app.post('/CreateOrder', (req,response)=>{
+      
+      const Orders = [];
+      const temp = req.body.Dish;
+      const CustomerName = req.body.CustomerName;
+      const TableNo = req.body.TableNo;
+      const Bill = parseFloat(req.body.TotalBill);
+      const notes = req.body.notes;
+
+      const result = temp.split(',');
+      for(var i = 0 ; i < result.length ; i=i+3){
+            Orders.push({
+                  DishName : result[i],
+                  Quantity : result[i+1],
+                  Rate : result[i+2]
+            });
+      }
 
       const RazAccountId = req.body.RazAccountID;
       if(RazAccountId){
@@ -193,6 +212,7 @@ app.post('/Table', (req,response)=>{
                     response.json({
                           key : process.env.KEY,
                           name : "Serve My Table",
+                          receipt : OrderRazorPayResponse.receipt,
                           id : OrderRazorPayResponse.id ,
                           currency : OrderRazorPayResponse.currency,
                           amount : parseInt(OrderRazorPayResponse.amount),
@@ -204,10 +224,66 @@ app.post('/Table', (req,response)=>{
       }
 });
 
+app.post("/Table",(req,res)=>{
+
+      const Orders = [];
+      const temp = req.body.Dish;
+      const CustomerName = req.body.CustomerName;
+      const TableNo = req.body.TableNo;
+      const Bill = parseFloat(req.body.TotalBill);
+      const notes = req.body.notes;
+
+      const result = temp.split(',');
+      for(var i = 0 ; i < result.length ; i=i+3){
+            Orders.push({
+                  DishName : result[i],
+                  Quantity : result[i+1],
+                  Rate : result[i+2]
+            });
+      }
+      var newTable = new Table({
+            RestaurantID : req.body.id,
+            tableNo : TableNo,
+            Orders : Orders,
+            TotalBill : Bill,
+            SubTotal : req.body.SubTotal,
+            CustomerName : CustomerName,
+            PaymentMode : req.body.PaymentMode,
+            notes : notes,
+            PaymentStatus : true
+      });
+      const RazorPayPaymentId = req.body.PaymentID;
+      const Order_ID = req.body.myOrderID;
+      const RazorPaySignature = req.body.Signature;
+      const Secret = process.env.KEYSECRET;
+
+      const crypto = require('crypto');
+      const hmac = crypto.createHmac('sha256', Secret);
+      hmac.update(Order_ID + "|" + RazorPayPaymentId);
+      const digest = hmac.digest('hex');
+      
+      if (digest == RazorPaySignature) {
+            newTable.save(function(error,raw){
+                  if(!error){
+        
+                        res.json({
+                              success : true
+                        });
+                              
+                                    
+                  }else{
+                        console.log("Payment Failed.");   
+                  }
+            });
+      }
+});
+
+
+
 app.post('/FinalPage',function(req,res){
 
-      Table.updateMany({RestaurantID:req.body.id,tableNo : req.body.TableNo},
-            { $set :{ PaymentStatus : true, PaymentID : req.body.paymentId } },{ upsert:true }
+      Table.updateOne({RestaurantID:req.body.id,tableNo : req.body.TableNo},
+            { $set :{ PaymentStatus : true, PaymentID : req.body.paymentId } }
             ,(err)=>{
                   if(err){
                         response.render("Error.ejs",
@@ -226,13 +302,6 @@ app.post('/FinalPage',function(req,res){
                         var PaymentMode = "Cash";
                         if(req.body.paymentId){ PaymentMode = "Online"; }
 
-
-                          /*generated_signature = hmac_sha256(order_id + "|" + razorpay_payment_id, secret);
-
-                          if (generated_signature == razorpay_signature) {
-                            payment is successful add to payment
-                          }*/
-                        
                         Payment.updateMany({RestaurantID:req.body.id,TableNo:req.body.TableNo},
                           {$set : {
                             RestaurantID : req.body.id,

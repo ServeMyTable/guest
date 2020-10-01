@@ -1,14 +1,5 @@
 const Order = [];
 
-function checkElements(){
-      const cart = document.getElementById('CartImage');
-      if(Order.length > 0){
-            cart.src = "./assets/cartwith.svg";
-      }else{
-            cart.src = "./assets/cart.svg";
-      }
-}
-
 function addItem(position){
 
       const Dish = document.getElementById('DishName'+position);
@@ -36,7 +27,6 @@ function increment(position){
       num = num + 1;
       obj.innerHTML = num;
       addItem(position)
-      checkElements()
 }
 
 function decrement(position){
@@ -45,7 +35,6 @@ function decrement(position){
       num = num - 1;
       if(num < 0){
             obj.innerHTML = 0
-            checkElements()
       }else{
             obj.innerHTML = num;
             addItem(position)

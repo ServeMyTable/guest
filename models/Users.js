@@ -13,7 +13,7 @@ const userSchema = new Schema({
       nTables:{ type : Number, min:1, default:1 },
       gstin:{ type : String, default : "" },
       pan : { type : String, default : "" },
-      Phone:{ type : Number, default : "", unique : true },
+      Phone:{ type : Number },
       AccountName : { type : String },
       AccountNumber : { type : Number },
       IFSCcode : { type : String },

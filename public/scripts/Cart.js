@@ -1,6 +1,6 @@
 function payBill(Dish,TableNo,Id,Time){
 
-        axios.post('/Table',{
+        axios.post('/CreateOrder',{
                 Dish : Dish ,
                 TableNo : TableNo,
                 id : Id,
@@ -12,8 +12,11 @@ function payBill(Dish,TableNo,Id,Time){
                 RestaurantName : document.getElementById('RestaurantName').innerText,
                 RestaurantAddress : document.getElementById('RestAddress').innerText,
                 RestaurantGST : document.getElementById('GSTIN').innerText,
-                PaymentMode : "Online"
+                PaymentMode : "Online",
+                notes : document.getElementById('Notes').value,
+                
         }).then(response=>{
+                
                 var options = {
                         key: response.data.key,
                         amount: response.data.amount,
@@ -23,7 +26,6 @@ function payBill(Dish,TableNo,Id,Time){
                         image: "https://www.servemytable.in/assets/logo.png",
                         order_id: response.data.id,
                         handler: function (res){
-
                                 const Cart = document.getElementById("FinalPageForm");
 
                                 const PaymentID = document.createElement('input');
@@ -42,11 +44,34 @@ function payBill(Dish,TableNo,Id,Time){
                                 Cart.appendChild(SignatureRaz);
 
                                 const OrderIDmy = document.createElement('input');
-                                OrderIDmy.setAttribute('value',response.data.id);
+                                OrderIDmy.setAttribute('value',response.data.receipt);
                                 OrderIDmy.setAttribute('name','OrderIDmy');
                                 Cart.appendChild(OrderIDmy);
 
-                                document.getElementById('FinalPageBtn').click();
+                                axios.post("/Table",{
+                                        Dish : Dish ,
+                                        TableNo : TableNo,
+                                        id : Id,
+                                        TotalBill : document.getElementById('TotalCalc').innerText,
+                                        Time :Time,
+                                        SubTotal : document.getElementById('totalAmt').innerText,
+                                        CustomerName : document.getElementById('CustName').innerText,
+                                        RazAccountID : document.getElementById('csrf_token').innerText,
+                                        RestaurantName : document.getElementById('RestaurantName').innerText,
+                                        RestaurantAddress : document.getElementById('RestAddress').innerText,
+                                        RestaurantGST : document.getElementById('GSTIN').innerText,
+                                        PaymentMode : "Online",
+                                        notes : document.getElementById('Notes').value,
+                                        PaymentID : res.razorpay_payment_id,
+                                        Signature : res.razorpay_signature,
+                                        myOrderID : res.razorpay_order_id
+                                }).then(response1 => {
+                                        
+                                        if(response1.data.success){
+                                                document.getElementById('FinalPageBtn').click();
+                                        }
+                                });
+                                
                         },
                         "prefill": {
                             "name": (document.getElementById('CustName').innerText).split()[2]
@@ -62,7 +87,7 @@ function payBill(Dish,TableNo,Id,Time){
 }
 
 function payBillCash(Dish,TableNo,Id,Time){
-        axios.post('/Table',{
+        axios.post('/TableCash',{
                 Dish : Dish ,
                 TableNo : TableNo,
                 id : Id,
@@ -73,7 +98,8 @@ function payBillCash(Dish,TableNo,Id,Time){
                 RestaurantName : document.getElementById('RestaurantName').innerText,
                 RestaurantAddress : document.getElementById('RestAddress').innerText,
                 RestaurantGST : document.getElementById('GSTIN').innerText,
-                PaymentMode : "Cash"
+                PaymentMode : "Cash",
+                notes : document.getElementById('Notes').value
         }).then(response => {
 
                 if(response.data.mode === "Cash"){

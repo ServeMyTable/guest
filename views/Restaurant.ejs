@@ -9,7 +9,7 @@
             <div class="container">
                   <a class="navbar-brand logoFont brand-name"><img src="./assets/logo.png" width="40"> Serve My Table</a>
                   <div class="navbar-nav ml-auto">
-                      <button class="yelBtn btn" onclick="getOrders()"><img id="CartImage" src="./assets/cart.svg"  alt="cart image"> Place Order</button>
+                      <button class="yelBtn btn" onclick="getOrders()">Place Order</button>
                   </div>
             </div>
       </nav>
@@ -21,11 +21,11 @@
                         <img class="mt-30"
                         src="<%=Restaurant.full.ImageUrl%>"
                         alt="Restaurant Image or Logo"
-                        width="100" height="100">
+                        width="150" height="150">
                   </div>
                   <div class="col-8">
                         <h2 class="mFont mt-30"><%=Restaurant.name%></h2>
-                        <h4 class="mFont mt-10 Restlocation"><%=Restaurant.location%></h4>
+                        <h6 class="mFont mt-10 Restlocation"><%=Restaurant.location%></h6>
                   </div>
             </div>
             <h5 class="mFont mt-10">Hello <%=CustomerName%>!</h5>
@@ -57,9 +57,13 @@
                                                 </p>
                                           </div>
                                           <div class="col-4">
-                                                <button class="CounterMinus" onclick="decrement('<%=j+1%>')">-</button>
-                                                &nbsp;<a id="Quantity<%=j+1%>">0</a> &nbsp;
-                                                <button class="CounterPlus" onclick="increment( '<%=j+1%>' )">+</button>
+                                                <%if(Restaurant.dishes[j].Available == true){%>
+                                                    <button class="CounterMinus" onclick="decrement('<%=j+1%>')">-</button>
+                                                    &nbsp;<a id="Quantity<%=j+1%>">0</a> &nbsp;
+                                                    <button class="CounterPlus" onclick="increment( '<%=j+1%>' )">+</button>
+                                                <%}else{%>
+                                                      <label class="mFont tags">UnAvailable</label>
+                                                <%}%>
                                           </div>
                                     </div>
                               <%}%>

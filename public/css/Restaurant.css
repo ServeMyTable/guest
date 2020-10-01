@@ -91,6 +91,10 @@ h3{
         font-weight: bold;
 }
 
+.Instruction{
+    border : 1px solid var(--theme-color);
+}
+
 @media (max-width: 700px) {
 
       .searchBar{

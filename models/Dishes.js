@@ -22,6 +22,10 @@ const DishSchema = new Schema({
       Category : {
             type : String,
             required : true
+      },
+      Available : {
+            type : Boolean,
+            default : true
       }
 
 },{
